@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import logging
 import time
 from collections.abc import Callable
@@ -52,8 +53,8 @@ class ScamLinkDatabase:
         self._normalize_host = normalize_host
         self._max_bytes = max_bytes
         self._snapshot = _Snapshot()
-        self._signature: tuple[int, int, int] | None = None
-        self._failed_signature: tuple[int, int, int] | None = None
+        self._signature: tuple[int, int, str] | None = None
+        self._failed_signature: tuple[int, int, str] | None = None
         self._retry_after = 0.0
         self._lock = asyncio.Lock()
 
@@ -140,12 +141,20 @@ class ScamLinkDatabase:
                 self._path,
             )
 
-    def _file_signature(self) -> tuple[int, int, int] | None:
+    def _file_signature(self) -> tuple[int, int, str] | None:
         try:
             stat = self._path.stat()
         except FileNotFoundError:
             return None
-        return stat.st_mtime_ns, stat.st_ctime_ns, stat.st_size
+        
+        if stat.st_size > self._max_bytes:
+            return stat.st_mtime_ns, stat.st_size, "<oversized>"
+
+        digest = hashlib.blake2b(digest_size=16)
+        with self._path.open("rb") as file:
+            for chunk in iter(lambda: file.read(65536), b""):
+                digest.update(chunk)
+        return stat.st_mtime_ns, stat.st_size, digest.hexdigest()
 
     def _load_snapshot(self) -> _Snapshot:
         try:
