@@ -41,4 +41,4 @@ def detect_tracker(url: str) -> TrackerMatch | None:
                 domain=domain,
             )
 
-    return None␊
+    return None
