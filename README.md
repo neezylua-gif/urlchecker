@@ -81,7 +81,7 @@ pip install -r requirements-dev.txt
 python -m pytest -q
 ```
 
-Текущая версия содержит 121 автоматический тест: нормализация URL, SSRF/DNS resolver, HTTP- и meta-refresh редиректы, эвристики, rate limit и обработка внутренних ошибок.
+Текущая версия содержит 143 автоматических теста: нормализация URL, SSRF/DNS resolver, HTTP- и meta-refresh редиректы, эвристики, rate limit и обработка внутренних ошибок.
 
 ## Настройка meta-refresh
 
