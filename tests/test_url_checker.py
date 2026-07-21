@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-
-
 import pytest
+
+from url_guard_bot.config import Config
 from url_guard_bot.url_checker import (
     InvalidURL,
-UnsafeTargetError,
+    UnsafeTargetError,
     extract_meta_refresh_target,
     has_sensitive_query,
     heuristic_findings,
@@ -39,7 +39,7 @@ def test_normalize_url_canonicalizes_safe_urls(
 @pytest.mark.parametrize(
     "url",
     [
-          "ftp://example.com/",
+        "ftp://example.com/",
         "https://example.com/%zz",
         "https://example.com/\\admin",
     ],
@@ -57,7 +57,7 @@ def test_normalize_url_rejects_invalid_urls(config: Config, url: str) -> None:
         "http://169.254.169.254/latest/meta-data/",
         "http://localhost/",
         "http://service.internal/",
-          "https://user:pass@example.com/",
+        "https://user:pass@example.com/",
     ],
 )
 def test_normalize_url_blocks_unsafe_targets(config: Config, url: str) -> None:
@@ -96,12 +96,19 @@ def test_registrable_domain(value: str, expected: str) -> None:
 
 
 def test_extract_meta_refresh_target_from_html_prefix() -> None:
-    html = b'<html><head><meta http-equiv="refresh" content="0; url=/next"></head></html>'
+    html = (
+        b'<html><head><meta http-equiv="refresh" content="0; url=/next"></head></html>'
+    )
     assert extract_meta_refresh_target(html, "text/html; charset=utf-8") == "/next"
 
 
 def test_extract_meta_refresh_target_ignores_non_html() -> None:
-    assert extract_meta_refresh_target(b'<meta http-equiv="refresh" content="0; url=/next">', "text/plain") is None
+    assert (
+        extract_meta_refresh_target(
+            b'<meta http-equiv="refresh" content="0; url=/next">', "text/plain"
+        )
+        is None
+    )
 
 
 def test_heuristic_findings_reports_plain_http_and_ip_literal() -> None:
