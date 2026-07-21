@@ -97,13 +97,6 @@ META_REFRESH_MAX_BYTES=2048
 Бот не является антивирусом и без внешних репутационных API не знает, внесён ли домен в базы Google Safe Browsing, VirusTotal и другие сервисы. Вердикт «явных признаков угрозы не обнаружено» не является гарантией безопасности.
 
 
-## Усиления версии 1.2.1
-
-- `BLOCK_SENSITIVE_QUERY_REQUESTS=true` запрещает сетевой запрос URL с параметрами `token`, `password`, `api_key`, `session` и похожими секретами.
-- `RATE_LIMIT_MAX_USERS=10000` ограничивает число ключей in-memory rate limiter.
-- Для production добавлен `requirements.lock.txt` с зафиксированными транзитивными зависимостями.
-- Docker запускается от непривилегированного пользователя, с read-only root filesystem, `cap_drop: ALL`, `no-new-privileges`, лимитами CPU/RAM/PID и без входящих портов.
-
 ## Проверка проекта
 
 ```bash
