@@ -146,7 +146,7 @@ class ScamLinkDatabase:
             stat = self._path.stat()
         except FileNotFoundError:
             return None
-        
+
         if stat.st_size > self._max_bytes:
             return stat.st_mtime_ns, stat.st_size, "<oversized>"
 
