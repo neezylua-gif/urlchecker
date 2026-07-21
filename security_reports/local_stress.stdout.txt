@@ -1,0 +1,14 @@
+{
+  "mode": "safe_in_process_only",
+  "users": 5000,
+  "requests_per_user": 8,
+  "total_checks": 40000,
+  "allowed": 25000,
+  "blocked": 15000,
+  "elapsed_seconds": 1.3183,
+  "checks_per_second": 30343.24,
+  "latency_ms_p50": 0.005,
+  "latency_ms_p95": 0.0104,
+  "memory_current_bytes": 34364587,
+  "memory_peak_bytes": 42863912
+}

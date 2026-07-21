@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "url-guard-bot"
+version = "1.2.1"
+description = "Telegram bot for cautious URL security checks"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "aiogram==3.30.0",
+  "aiohttp==3.14.1",
+  "python-dotenv==1.2.2",
+  "tldextract==5.3.1",
+  "idna==3.18",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.4.2",
+  "pytest-asyncio==1.4.0",
+  "ruff==0.15.22",
+  "pip-audit>=2.9,<3",
+  "bandit>=1.8,<2",
+]
+
+[tool.setuptools.packages.find]
+include = ["url_guard_bot*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "S"]
+ignore = ["S101", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S104", "S105", "S106"]
+"scripts/*" = ["S603", "S607"]

@@ -1,0 +1,17 @@
+{
+  "check": "URLAnalyzer session startup opens no listening socket",
+  "before_socket_fds": [
+    "socket:[2642]",
+    "socket:[2643]"
+  ],
+  "after_start_socket_fds": [
+    "socket:[2642]",
+    "socket:[2643]"
+  ],
+  "after_close_socket_fds": [
+    "socket:[2642]",
+    "socket:[2643]"
+  ],
+  "new_sockets_after_start": [],
+  "pass": true
+}

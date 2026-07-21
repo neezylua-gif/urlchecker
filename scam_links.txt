@@ -1,0 +1,5 @@
+# Локальная база известных вредоносных доменов/URL.
+# По одной записи на строку. Примеры оставлены закомментированными.
+# bad-domain.example
+# url:https://example.org/fake-login
+# prefix:https://example.net/malware/

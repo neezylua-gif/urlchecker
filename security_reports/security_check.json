@@ -1,0 +1,63 @@
+{
+  "python": "3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]",
+  "compileall": true,
+  "forbidden_patterns": [],
+  "env_file_present": false,
+  "gitignore_blocks_env": true,
+  "docker_hardening": {
+    "read_only": true,
+    "cap_drop_all": true,
+    "no_new_privileges": true,
+    "non_root_user": true
+  },
+  "pytest": {
+    "command": [
+      "/mnt/data/url_security_bot_ready/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-q"
+    ],
+    "returncode": 0,
+    "stdout": "........................................................................ [ 59%]\n.................................................                        [100%]\n121 passed in 10.13s\n",
+    "stderr": ""
+  },
+  "ruff": {
+    "command": [
+      "/mnt/data/url_security_bot_ready/.venv/bin/python",
+      "-m",
+      "ruff",
+      "check",
+      "."
+    ],
+    "returncode": 0,
+    "stdout": "All checks passed!\n",
+    "stderr": ""
+  },
+  "ruff_format": {
+    "command": [
+      "/mnt/data/url_security_bot_ready/.venv/bin/python",
+      "-m",
+      "ruff",
+      "format",
+      "--check",
+      "."
+    ],
+    "returncode": 0,
+    "stdout": "30 files already formatted\n",
+    "stderr": ""
+  },
+  "bandit": {
+    "command": [
+      "/mnt/data/url_security_bot_ready/.venv/bin/python",
+      "-m",
+      "bandit",
+      "-q",
+      "-r",
+      "url_guard_bot",
+      "scripts"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

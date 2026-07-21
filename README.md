@@ -1,0 +1,124 @@
+# URL Guard Bot
+
+Telegram-бот для осторожной технической проверки URL. Он проверяет схему, домен, TLS, HTTP-ответ, цепочку редиректов и несколько признаков фишинга.
+
+## Защита самого бота
+
+- SSRF-защита на двух уровнях: до запроса и внутри DNS resolver.
+- Блокируются loopback, private, link-local, multicast, reserved, unspecified, shared `100.64.0.0/10`, IPv4-mapped IPv6 и специальные локальные имена.
+- DNS-адреса передаются HTTP-клиенту только после проверки; DNS-кеш отключён.
+- Каждый редирект проверяется **до** перехода, автоматические редиректы запрещены.
+- По умолчанию разрешены только исходящие порты 80 и 443.
+- Запрещены URL с логином/паролем, управляющими символами, обратными слешами и нестандартными схемами.
+- Percent-кодирование декодируется ограниченное число раз; блокируются все управляющие символы `00–1F/7F`, включая двойное кодирование.
+- Общий semaphore, лимит параллельных Telegram updates и rate limit на пользователя.
+- Отключены cookies, proxy-переменные окружения и автоматическая распаковка ответов.
+- Используется `HEAD`; ограниченный `GET Range` выполняется при `405/501` и для опциональной проверки HTML meta-refresh.
+- Meta-refresh из первых 2048 байт HTML проходит ту же проверку, что HTTP-редиректы, до обращения к целевому адресу.
+- Ошибки `tldextract` не прерывают анализ: используется безопасный базовый fallback домена.
+- Query-параметры скрываются в ответах, чтобы не показывать токены.
+
+
+## Локальная база скам-ссылок
+
+Добавляйте известные вредоносные домены и URL в файл `scam_links.txt` — по одной записи на строку. Бот автоматически перечитывает файл без перезапуска и проверяет базу до сетевого обращения, включая цели HTTP- и meta-refresh редиректов.
+
+Примеры:
+
+```text
+bad-domain.com
+https://example.com/fake-login
+prefix:https://example.net/malware/
+```
+
+- `bad-domain.com` блокирует домен и все поддомены.
+- Полный URL блокирует конкретный путь. Если query в записи отсутствует, любые query-параметры также совпадут.
+- `prefix:` блокирует все URL с заданным началом.
+- Пустые строки и комментарии с `#` или `;` игнорируются.
+
+Подробности: `ИНСТРУКЦИЯ_ПО_БАЗЕ_СКАМ_ССЫЛОК.md`.
+
+Настройки `.env`:
+
+```dotenv
+SCAM_LINKS_FILE=scam_links.txt
+SCAM_LINKS_MAX_BYTES=1048576
+```
+
+## Запуск на Windows
+
+1. Установите Python 3.11–3.13.
+2. Откройте терминал в папке проекта.
+3. Создайте окружение:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+4. Скопируйте `.env.example` в `.env` и укажите `BOT_TOKEN`.
+5. Запустите `run.bat` или:
+
+```powershell
+python -m url_guard_bot
+```
+
+## Запуск через Docker
+
+```bash
+cp .env.example .env
+# отредактируйте BOT_TOKEN
+docker compose up -d --build
+```
+
+Compose запускает контейнер без Linux capabilities, с `no-new-privileges`, read-only filesystem и лимитами ресурсов.
+
+## Тесты
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+Текущая версия содержит 121 автоматический тест: нормализация URL, SSRF/DNS resolver, HTTP- и meta-refresh редиректы, эвристики, rate limit и обработка внутренних ошибок.
+
+## Настройка meta-refresh
+
+```dotenv
+CHECK_META_REFRESH=true
+META_REFRESH_MAX_BYTES=2048
+```
+
+Проверку можно отключить через `CHECK_META_REFRESH=false`. Размер префикса ограничен и не приводит к загрузке полной HTML-страницы.
+
+## Ограничения
+
+Бот не является антивирусом и без внешних репутационных API не знает, внесён ли домен в базы Google Safe Browsing, VirusTotal и другие сервисы. Вердикт «явных признаков угрозы не обнаружено» не является гарантией безопасности.
+
+
+## Усиления версии 1.2.1
+
+- `BLOCK_SENSITIVE_QUERY_REQUESTS=true` запрещает сетевой запрос URL с параметрами `token`, `password`, `api_key`, `session` и похожими секретами.
+- `RATE_LIMIT_MAX_USERS=10000` ограничивает число ключей in-memory rate limiter.
+- Для production добавлен `requirements.lock.txt` с зафиксированными транзитивными зависимостями.
+- Docker запускается от непривилегированного пользователя, с read-only root filesystem, `cap_drop: ALL`, `no-new-privileges`, лимитами CPU/RAM/PID и без входящих портов.
+
+## Проверка проекта
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements-dev.txt
+python scripts/security_check.py
+python scripts/local_stress_test.py --output security_reports/local_stress.json
+```
+
+Loopback-only лаборатория для `nmap`/`tcpdump` не принимает удалённый адрес и работает только с `127.0.0.1`:
+
+```bash
+python scripts/loopback_network_lab.py --capture \
+  --output security_reports/loopback_network_lab.json
+```
+
+Полный отчёт: `SECURITY_AUDIT_2026-07-21.md`.

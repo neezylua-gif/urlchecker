@@ -1,0 +1,25 @@
+services:
+  url-guard-bot:
+    build:
+      context: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    volumes:
+      - ./scam_links.txt:/app/scam_links.txt:ro
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 256m
+    cpus: 1.0
+    networks:
+      - bot-egress
+
+networks:
+  bot-egress:
+    driver: bridge

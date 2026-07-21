@@ -1,0 +1,11 @@
+{
+  "scope": "loopback_only",
+  "host": "127.0.0.1",
+  "port": 40953,
+  "requests": 100,
+  "elapsed_seconds": 0.1136,
+  "requests_per_second": 880.15,
+  "python_tcp_probe": "open",
+  "nmap": "nmap not installed; Python loopback TCP probe used",
+  "pcap": null
+}

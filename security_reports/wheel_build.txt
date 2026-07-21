@@ -1,0 +1,14 @@
+Looking in indexes: https://reader:****@packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/pypi/pypi-public/simple
+Processing ./.
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: url-guard-bot
+  Building wheel for url-guard-bot (pyproject.toml): started
+  Building wheel for url-guard-bot (pyproject.toml): finished with status 'done'
+  Created wheel for url-guard-bot: filename=url_guard_bot-1.2.1-py3-none-any.whl size=22416 sha256=ec7f84d9ff9d8ccd58d4469449779f0bd4141542ed2da959c7b8fd8cf9eac9e1
+  Stored in directory: /tmp/pip-ephem-wheel-cache-g32h3sjf/wheels/ed/21/2c/ebc2cfd000d76f62ade15c5157feb9e93f4b59ce3055457e4a
+Successfully built url-guard-bot

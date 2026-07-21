@@ -1,0 +1,19 @@
+URL Guard Bot 1.2.0 — test report
+Generated: 2026-07-19
+
+Checks completed:
+- Python compileall: PASS
+- Ruff lint: PASS
+- Ruff format check: PASS
+- pytest: PASS (84 tests)
+
+Coverage areas:
+- URL normalization and percent-decoding edge cases
+- SSRF, private/special IP and DNS rebinding protection
+- PublicOnlyResolver mocked DNS behavior
+- HTTP and HTML meta-refresh redirect policy
+- HTTPS downgrade, redirect loops and cross-domain redirects
+- Domain heuristics and tldextract failure fallback
+- Local scam-link database parsing, matching and hot reload
+- Local blacklist checks before initial and redirect network requests
+- Rate limiting, handlers and unexpected analyzer failures
