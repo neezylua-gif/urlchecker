@@ -15,7 +15,7 @@ No high-severity defect was found in the application source during this review. 
 |---|---:|
 | Python `compileall` | PASS |
 | Wheel build and clean-venv import | PASS (`url_guard_bot==1.2.1`) |
-| pytest | PASS — 121 tests |
+| pytest | PASS — 143 tests |
 | Ruff lint | PASS |
 | Ruff format check | PASS |
 | Bandit application/script scan | PASS — 0 findings after review of fixed loopback-only subprocess calls |
